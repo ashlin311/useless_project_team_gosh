@@ -41,23 +41,15 @@ We connect to your Spotify account, grab your top artists and tracks, and have K
 
 ### Screenshot
 
-![App Screenshot]
-(screenshots\Screenshot-(305).png)
+https://ibb.co/ccKyBdqB
+https://ibb.co/J0g6zzC
+https://ibb.co/MxmFb0Rc
+https://ibb.co/Mkv2jrJb
+https://ibb.co/prn2GFyk
+https://ibb.co/HLgJXCsH
 
-![App Screenshot]
-(screenshots\Screenshot-(306).png)
+I know it looks shady, but trust me, it's not. I am not a very capable person.
 
-![App Screenshot]
-(screenshots\Screenshot-(307).png)
-
-![App ScreenShot]
-(screenshots\Screenshot-(308).png)
-
-![App ScreenShot]
-(screenshots\Screenshot-(309).png)
-
-![App ScreenShot]
-(screenshots\Screenshot-(310).png)
 ### Installation
 ``` bash
 git clone https://github.com/yourusername/mollywoodify.git
