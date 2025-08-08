@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_SPOTIFY_CLIENT_ID": "@react_app_spotify_client_id",
+    "REACT_APP_SPOTIFY_REDIRECT_URI": "@react_app_spotify_redirect_uri", 
+    "REACT_APP_GEMINI_API_KEY": "@react_app_gemini_api_key",
+    "REACT_APP_SPOTIFY_TEST_TOKEN": "@react_app_spotify_test_token"
+  }
+}
