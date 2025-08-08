@@ -1,0 +1,392 @@
+/* Music Analysis Component Styles */
+
+.music-analysis {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: white;
+}
+
+.analysis-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.analysis-header h2 {
+  color: #FFD700;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.analysis-header p {
+  color: #E8E8E8;
+  font-size: 1.1rem;
+}
+
+/* Loading States */
+.music-analysis-loading,
+.music-analysis-error,
+.music-analysis-empty {
+  text-align: center;
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(29, 185, 84, 0.3);
+  border-top: 3px solid #1DB954;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem auto;
+}
+
+.music-analysis-error button {
+  background: #e22134;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.music-analysis-error button:hover {
+  background: #c41e3a;
+  transform: translateY(-1px);
+}
+
+/* Time Range Selector */
+.time-range-selector {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.time-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.time-btn:hover,
+.time-btn.active {
+  background: #1DB954;
+  border-color: #1DB954;
+  transform: translateY(-1px);
+}
+
+/* Roasting Summary */
+.roasting-summary {
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.roasting-summary h3 {
+  color: #FFD700;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.insight-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.insight-card h4 {
+  color: #FFD700;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.insight-card p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.roast-level {
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.roast-level.high {
+  background: rgba(226, 33, 52, 0.2);
+  color: #ff6b7a;
+}
+
+.roast-level.low {
+  background: rgba(29, 185, 84, 0.2);
+  color: #4ade80;
+}
+
+/* Music Sections */
+.music-section {
+  margin-bottom: 3rem;
+}
+
+.music-section h3 {
+  color: #FFD700;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+/* Tracks Grid */
+.tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.track-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.track-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.track-number {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: #1DB954;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.track-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.track-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.track-name {
+  color: white;
+  font-size: 1rem;
+  margin: 0 0 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track-artist {
+  color: #B0B0B0;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track-stats {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.popularity,
+.followers {
+  font-size: 0.8rem;
+  color: #FFD700;
+}
+
+.explicit {
+  font-size: 0.8rem;
+  color: #ff6b7a;
+}
+
+/* Artists Grid */
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.artist-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.artist-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.artist-number {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: #1DB954;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.artist-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem auto;
+  display: block;
+}
+
+.artist-name {
+  color: white;
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.artist-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.genre-tag {
+  background: rgba(29, 185, 84, 0.2);
+  color: #4ade80;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  text-transform: capitalize;
+}
+
+.artist-stats {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ready for Roasting */
+.roasting-ready {
+  text-align: center;
+  background: rgba(226, 33, 52, 0.1);
+  border: 1px solid rgba(226, 33, 52, 0.3);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-top: 3rem;
+}
+
+.roasting-ready h3 {
+  color: #FFD700;
+  margin-bottom: 1rem;
+}
+
+.roasting-ready p {
+  color: #E8E8E8;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.start-roasting-btn {
+  background: linear-gradient(45deg, #e22134, #ff6b7a);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(226, 33, 52, 0.3);
+}
+
+.start-roasting-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(226, 33, 52, 0.4);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .music-analysis {
+    padding: 1rem;
+  }
+  
+  .tracks-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .artists-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .time-range-selector {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .track-card {
+    padding: 0.75rem;
+  }
+  
+  .artist-card {
+    padding: 0.75rem;
+  }
+}

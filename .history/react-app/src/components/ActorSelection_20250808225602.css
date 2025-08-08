@@ -1,0 +1,377 @@
+/* Actor Selection Component Styles */
+
+.actor-selection {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1DB954 0%, #191414 100%);
+  color: white;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.selection-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.selection-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
+.selection-subtitle {
+  font-size: 1.3rem;
+  color: #E8E8E8;
+  margin: 0;
+}
+
+/* Ring Layout */
+.actors-ring {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  margin: 2rem auto;
+}
+
+.ring-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.actor-circle {
+  position: absolute;
+  width: 120px;
+  height: 140px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* More precise centering and positioning */
+  left: 50%;
+  top: 50%;
+  margin-left: -60px; /* Half of width */
+  margin-top: -70px;  /* Half of height */
+  
+  /* Calculate position in a perfect circle */
+  transform: 
+    rotate(calc(360deg / var(--total) * var(--index))) 
+    translateY(-200px) 
+    rotate(calc(-360deg / var(--total) * var(--index)));
+}
+
+.actor-circle:hover {
+  transform: 
+    rotate(calc(360deg / var(--total) * var(--index))) 
+    translateY(-200px) 
+    rotate(calc(-360deg / var(--total) * var(--index)))
+    scale(1.1);
+}
+
+.actor-circle.selected {
+  transform: 
+    rotate(calc(360deg / var(--total) * var(--index))) 
+    translateY(-200px) 
+    rotate(calc(-360deg / var(--total) * var(--index)))
+    scale(1.2);
+}
+
+.actor-image-container {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 0.5rem auto;
+  position: relative;
+}
+
+.actor-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #333, #555);
+  border: 4px solid #FFD700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.actor-circle:hover .actor-placeholder {
+  border-color: #1DB954;
+  box-shadow: 0 12px 30px rgba(29, 185, 84, 0.4);
+}
+
+.actor-circle.selected .actor-placeholder {
+  border-color: #ff6b7a;
+  background: linear-gradient(45deg, #e22134, #ff6b7a);
+  box-shadow: 0 12px 30px rgba(226, 33, 52, 0.5);
+}
+
+.actor-emoji {
+  font-size: 2.5rem;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.actor-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #FFD700;
+  transition: all 0.3s ease;
+}
+
+.actor-name {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  transition: all 0.3s ease;
+}
+
+.actor-circle:hover .actor-name {
+  color: #1DB954;
+}
+
+.actor-circle.selected .actor-name {
+  color: #ff6b7a;
+  font-size: 1rem;
+}
+
+/* Center Content */
+.ring-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.center-content {
+  text-align: center;
+  padding: 1rem;
+}
+
+.center-title,
+.selected-actor-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #FFD700;
+}
+
+.center-text,
+.selected-actor-text {
+  font-size: 0.9rem;
+  color: #E8E8E8;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.proceed-btn {
+  background: linear-gradient(45deg, #e22134, #ff6b7a);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(226, 33, 52, 0.3);
+}
+
+.proceed-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(226, 33, 52, 0.4);
+}
+
+.btn-icon {
+  font-size: 1rem;
+}
+
+/* Footer Descriptions */
+.selection-footer {
+  margin-top: 3rem;
+  max-width: 1000px;
+}
+
+.actor-descriptions {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.description-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.actor-desc {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.actor-desc strong {
+  color: #FFD700;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.ring-center {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .actor-selection {
+    padding: 1rem;
+  }
+  
+  .selection-title {
+    font-size: 2rem;
+  }
+  
+  .selection-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .actors-ring {
+    width: 350px;
+    height: 350px;
+  }
+  
+  .actor-circle {
+    width: 80px;
+    height: 100px;
+    transform: 
+      translate(-50%, -50%) 
+      rotate(calc(360deg / var(--total) * var(--index))) 
+      translateY(-140px) 
+      rotate(calc(-360deg / var(--total) * var(--index)));
+  }
+  
+  .actor-circle:hover,
+  .actor-circle.selected {
+    transform: 
+      translate(-50%, -50%) 
+      rotate(calc(360deg / var(--total) * var(--index))) 
+      translateY(-140px) 
+      rotate(calc(-360deg / var(--total) * var(--index)))
+      scale(1.1);
+  }
+  
+  .actor-image-container {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .actor-emoji {
+    font-size: 1.8rem;
+  }
+  
+  .actor-name {
+    font-size: 0.7rem;
+  }
+  
+  .ring-center {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .center-title,
+  .selected-actor-name {
+    font-size: 1rem;
+  }
+  
+  .center-text,
+  .selected-actor-text {
+    font-size: 0.8rem;
+  }
+  
+  .proceed-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .description-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .actors-ring {
+    width: 280px;
+    height: 280px;
+  }
+  
+  .actor-circle {
+    width: 60px;
+    height: 80px;
+    transform: 
+      translate(-50%, -50%) 
+      rotate(calc(360deg / var(--total) * var(--index))) 
+      translateY(-110px) 
+      rotate(calc(-360deg / var(--total) * var(--index)));
+  }
+  
+  .actor-circle:hover,
+  .actor-circle.selected {
+    transform: 
+      translate(-50%, -50%) 
+      rotate(calc(360deg / var(--total) * var(--index))) 
+      translateY(-110px) 
+      rotate(calc(-360deg / var(--total) * var(--index)))
+      scale(1.05);
+  }
+  
+  .actor-image-container {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .actor-emoji {
+    font-size: 1.3rem;
+  }
+  
+  .actor-name {
+    font-size: 0.6rem;
+  }
+  
+  .ring-center {
+    width: 100px;
+    height: 100px;
+  }
+}
