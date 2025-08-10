@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import './AudioRoastPage.css';
-import AudioDebugHelper from './AudioDebugHelper';
 
 // Import actor images
 import mohanlalImg from '../images/mohanlal.webp';
@@ -38,93 +37,29 @@ const AudioRoastPage = ({ onBack }) => {
 
   const startRecording = async () => {
     try {
-      console.log('🎤 Requesting microphone access...');
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          sampleRate: 44100
-        } 
-      });
-      
-      console.log('✅ Microphone access granted');
-      
-      // Check if MediaRecorder is supported
-      if (!MediaRecorder.isTypeSupported('audio/webm')) {
-        console.warn('⚠️ audio/webm not supported, trying alternatives...');
-      }
-
-      // Try different MIME types for better compatibility
-      let options = {};
-      if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
-        options.mimeType = 'audio/webm;codecs=opus';
-      } else if (MediaRecorder.isTypeSupported('audio/webm')) {
-        options.mimeType = 'audio/webm';
-      } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
-        options.mimeType = 'audio/mp4';
-      }
-
-      console.log('🎵 Using MediaRecorder with options:', options);
-      
-      mediaRecorderRef.current = new MediaRecorder(stream, options);
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
       audioChunksRef.current = [];
 
       mediaRecorderRef.current.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-          console.log('📊 Audio chunk received, size:', event.data.size);
-        }
+        audioChunksRef.current.push(event.data);
       };
 
       mediaRecorderRef.current.onstop = () => {
-        console.log('⏹️ Recording stopped, processing audio...');
-        
         // Use the actual MIME type from MediaRecorder
         const mimeType = mediaRecorderRef.current.mimeType || 'audio/webm';
         const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
         
-        console.log('🎤 Recording details:', {
-          mimeType: mimeType,
-          size: audioBlob.size,
-          chunks: audioChunksRef.current.length
-        });
-
-        if (audioBlob.size === 0) {
-          alert('Recording failed - no audio data captured. Please try again.');
-          return;
-        }
-        
+        console.log('🎤 Recording stopped, MIME type:', mimeType, 'Size:', audioBlob.size);
         setAudioFile(audioBlob);
         stream.getTracks().forEach(track => track.stop());
-        console.log('✅ Audio recording saved successfully');
       };
 
-      mediaRecorderRef.current.onerror = (event) => {
-        console.error('❌ MediaRecorder error:', event.error);
-        alert('Recording error: ' + event.error);
-        setRecording(false);
-        stream.getTracks().forEach(track => track.stop());
-      };
-
-      mediaRecorderRef.current.start(1000); // Collect data every 1 second
+      mediaRecorderRef.current.start();
       setRecording(true);
-      console.log('🔴 Recording started');
-      
     } catch (error) {
-      console.error('❌ Error starting recording:', error);
-      let errorMessage = 'Could not start recording. ';
-      
-      if (error.name === 'NotAllowedError') {
-        errorMessage += 'Please allow microphone access and try again.';
-      } else if (error.name === 'NotFoundError') {
-        errorMessage += 'No microphone found. Please check your audio devices.';
-      } else if (error.name === 'NotSupportedError') {
-        errorMessage += 'Audio recording not supported in this browser.';
-      } else {
-        errorMessage += 'Error: ' + error.message;
-      }
-      
-      alert(errorMessage);
+      console.error('Error starting recording:', error);
+      alert('Could not start recording. Please check your microphone permissions.');
     }
   };
 
@@ -145,30 +80,18 @@ const AudioRoastPage = ({ onBack }) => {
         lastModified: file.lastModified
       });
       
-      // Validate file type
-      if (!file.type.startsWith('audio/')) {
-        alert('Please upload a valid audio file (MP3, WAV, M4A, OGG, WEBM, etc.)');
-        event.target.value = ''; // Clear the input
-        return;
+      if (file.type.startsWith('audio/')) {
+        // Check file size (limit to ~10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          alert('File too large! Please upload an audio file smaller than 10MB.');
+          return;
+        }
+        
+        setAudioFile(file);
+        setRoastResult(null);
+      } else {
+        alert('Please upload a valid audio file (MP3, WAV, M4A, etc.)');
       }
-
-      // Check file size (limit to ~25MB for Gemini API)
-      if (file.size > 25 * 1024 * 1024) {
-        alert('File too large! Please upload an audio file smaller than 25MB.');
-        event.target.value = ''; // Clear the input
-        return;
-      }
-
-      // Check if file is empty
-      if (file.size === 0) {
-        alert('The selected file is empty. Please choose a valid audio file.');
-        event.target.value = ''; // Clear the input
-        return;
-      }
-      
-      console.log('✅ Audio file validation passed');
-      setAudioFile(file);
-      setRoastResult(null);
     }
   };
 
@@ -176,38 +99,11 @@ const AudioRoastPage = ({ onBack }) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        try {
-          if (!reader.result) {
-            throw new Error('FileReader result is null');
-          }
-          
-          // Check if the result contains base64 data
-          if (typeof reader.result !== 'string') {
-            throw new Error('FileReader result is not a string');
-          }
-          
-          // Split on comma and get the base64 part
-          const parts = reader.result.split(',');
-          if (parts.length < 2) {
-            throw new Error('Invalid data URL format');
-          }
-          
-          const base64 = parts[1];
-          if (!base64 || base64.length === 0) {
-            throw new Error('Empty base64 data');
-          }
-          
-          console.log('✅ Successfully converted audio to base64, length:', base64.length);
-          resolve(base64);
-        } catch (error) {
-          console.error('❌ Error in convertBlobToBase64:', error);
-          reject(error);
-        }
+        // Remove the data:audio/wav;base64, prefix
+        const base64 = reader.result.split(',')[1];
+        resolve(base64);
       };
-      reader.onerror = (error) => {
-        console.error('❌ FileReader error:', error);
-        reject(new Error('Failed to read audio file'));
-      };
+      reader.onerror = reject;
       reader.readAsDataURL(blob);
     });
   };
@@ -222,44 +118,22 @@ const AudioRoastPage = ({ onBack }) => {
     setRoastResult(null);
 
     try {
-      // Validate audio file
-      if (!audioFile) {
-        throw new Error('No audio file provided');
-      }
-
-      if (audioFile.size === 0) {
-        throw new Error('Audio file is empty');
-      }
-
-      if (audioFile.size > 25 * 1024 * 1024) { // 25MB limit for Gemini
-        throw new Error('Audio file too large (max 25MB)');
-      }
-
       // Debug logging for audio file
       console.log('🎵 Audio file details:', {
         type: audioFile.type,
         size: audioFile.size,
-        name: audioFile.name || 'recorded-audio',
-        lastModified: audioFile.lastModified
+        name: audioFile.name || 'recorded-audio'
       });
 
       // Convert audio file to base64 for Gemini API
-      console.log('🔄 Converting audio to base64...');
       const audioBase64 = await convertBlobToBase64(audioFile);
       
-      if (!audioBase64 || audioBase64.length === 0) {
-        throw new Error('Failed to convert audio to base64');
-      }
-      
       // Log first 100 chars of base64 for debugging
-      console.log('🎵 Base64 conversion successful, preview:', audioBase64.slice(0, 100));
-      console.log('🎵 Base64 total length:', audioBase64.length);
+      console.log('🎵 Base64 preview:', audioBase64.slice(0, 100));
       
-      console.log('🚀 Sending to Gemini for analysis...');
       const result = await generateAudioRoast(selectedActor, audioBase64, severity);
       
       if (result.success) {
-        console.log('✅ Roast generated successfully');
         setRoastResult({
           roastText: result.roast,
           actor: result.actor,
@@ -269,22 +143,20 @@ const AudioRoastPage = ({ onBack }) => {
           score: 8
         });
       } else {
-        console.log('⚠️ Roast generation failed, using fallback');
         setRoastResult({
           roastText: result.fallbackRoast || 'Sorry, could not analyze your singing right now!',
-          observations: ['Audio analysis failed: ' + (result.error || 'Unknown error')],
-          tips: ['Try again with a clearer recording', 'Ensure good audio quality'],
+          observations: ['Audio analysis failed'],
+          tips: ['Try again with a clearer recording'],
           score: null,
           severity: severity
         });
       }
     } catch (error) {
-      console.error('❌ Error in handleGetRoasted:', error);
-      console.error('Error details:', error.message);
+      console.error('Error getting audio roast:', error);
       setRoastResult({
-        roastText: `Ayyo, technical issue with the roasting! Error: ${error.message} Try again, ketto! 😅`,
-        observations: [`Error occurred: ${error.message}`],
-        tips: ['Check your internet connection', 'Try a different audio file', 'Ensure the file is a valid audio format'],
+        roastText: 'Ayyo, technical issue with the roasting! Try again, ketto! 😅',
+        observations: ['Error occurred during analysis'],
+        tips: ['Check your internet connection and try again'],
         score: null,
         severity: severity
       });
@@ -305,10 +177,9 @@ const AudioRoastPage = ({ onBack }) => {
 
   return (
     <div className="audio-roast-page">
-      <AudioDebugHelper />
       <div className="header">
-        <h1>🎤 Singing Roast</h1>
-        <p>Let Malayalam movie stars roast your singing skills</p>
+        <h1>🎤 Let us </h1>
+        <p>Let Malayalam movie stars roast your singing skills with AI!</p>
       </div>
 
       {!roastResult ? (

@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import './AudioRoastPage.css';
-import AudioDebugHelper from './AudioDebugHelper';
 
 // Import actor images
 import mohanlalImg from '../images/mohanlal.webp';
@@ -145,30 +144,18 @@ const AudioRoastPage = ({ onBack }) => {
         lastModified: file.lastModified
       });
       
-      // Validate file type
-      if (!file.type.startsWith('audio/')) {
-        alert('Please upload a valid audio file (MP3, WAV, M4A, OGG, WEBM, etc.)');
-        event.target.value = ''; // Clear the input
-        return;
+      if (file.type.startsWith('audio/')) {
+        // Check file size (limit to ~10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          alert('File too large! Please upload an audio file smaller than 10MB.');
+          return;
+        }
+        
+        setAudioFile(file);
+        setRoastResult(null);
+      } else {
+        alert('Please upload a valid audio file (MP3, WAV, M4A, etc.)');
       }
-
-      // Check file size (limit to ~25MB for Gemini API)
-      if (file.size > 25 * 1024 * 1024) {
-        alert('File too large! Please upload an audio file smaller than 25MB.');
-        event.target.value = ''; // Clear the input
-        return;
-      }
-
-      // Check if file is empty
-      if (file.size === 0) {
-        alert('The selected file is empty. Please choose a valid audio file.');
-        event.target.value = ''; // Clear the input
-        return;
-      }
-      
-      console.log('✅ Audio file validation passed');
-      setAudioFile(file);
-      setRoastResult(null);
     }
   };
 
@@ -305,7 +292,6 @@ const AudioRoastPage = ({ onBack }) => {
 
   return (
     <div className="audio-roast-page">
-      <AudioDebugHelper />
       <div className="header">
         <h1>🎤 Singing Roast</h1>
         <p>Let Malayalam movie stars roast your singing skills</p>
