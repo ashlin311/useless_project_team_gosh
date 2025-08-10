@@ -543,7 +543,7 @@ export const devHelpers = {
   }
 };
 
-const SpotifyDataFetcher = {
+export default {
   fetchAndStoreSpotifyData,
   getStoredSpotifyData,
   refreshIfStale,
@@ -555,5 +555,3 @@ const SpotifyDataFetcher = {
   importSpotifyData,
   devHelpers
 };
-
-export default SpotifyDataFetcher;

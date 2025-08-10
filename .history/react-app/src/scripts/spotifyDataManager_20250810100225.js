@@ -183,7 +183,7 @@ export const clearAllData = () => {
 };
 
 // Export as default object for easy importing
-const SpotifyDataManager = {
+export default {
   initializeSpotifyData,
   getUserMusicData,
   forceRefreshData,
@@ -191,5 +191,3 @@ const SpotifyDataManager = {
   isDataFresh,
   clearAllData
 };
-
-export default SpotifyDataManager;

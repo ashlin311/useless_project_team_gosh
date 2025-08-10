@@ -209,7 +209,7 @@ const storeSpotifyData = async (musicData) => {
  * @returns {Object} - Advanced insights object
  */
 const generateAdvancedInsights = (results) => {
-  const [topTracksShort, topTracksMedium, topTracksLong, topArtistsShort, topArtistsMedium, topArtistsLong] = results;
+  const [topTracksShort, topTracksMedium, topTracksLong, topArtistsShort, topArtistsMedium, topArtistsLong, recentlyPlayed] = results;
   
   const insights = {
     genres: new Set(),
@@ -543,7 +543,7 @@ export const devHelpers = {
   }
 };
 
-const SpotifyDataFetcher = {
+export default {
   fetchAndStoreSpotifyData,
   getStoredSpotifyData,
   refreshIfStale,
@@ -555,5 +555,3 @@ const SpotifyDataFetcher = {
   importSpotifyData,
   devHelpers
 };
-
-export default SpotifyDataFetcher;
