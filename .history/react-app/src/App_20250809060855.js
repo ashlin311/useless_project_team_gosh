@@ -124,23 +124,8 @@ function App() {
     }
   }, [fetchMusicData, logout]);
 
-  // Auto-login with environment token on component mount with enhanced data loading
+  // Auto-login with environment token on component mount
   useEffect(() => {
-    // First, check for cached data immediately
-    const status = SpotifyDataManager.getDataStatus();
-    if (status.hasData) {
-      console.log('📦 Found cached music data:', status);
-      const cachedData = SpotifyDataManager.getUserMusicData('full');
-      if (cachedData) {
-        setMusicData(cachedData);
-        console.log('✅ Loaded cached music data with', {
-          tracks: cachedData?.topTracks?.mediumTerm?.length || 0,
-          artists: cachedData?.topArtists?.mediumTerm?.length || 0,
-          genres: cachedData?.insights?.topGenres?.length || 0
-        });
-      }
-    }
-
     const envToken = process.env.REACT_APP_SPOTIFY_TEST_TOKEN;
     
     if (envToken) {
@@ -151,19 +136,6 @@ function App() {
     } else {
       console.error('❌ No Spotify token found in environment variables');
       alert('Spotify token not configured. Please check your .env file.');
-      
-      // Still try to use cached data even without token
-      if (!status.hasData) {
-        const legacyCachedData = window.localStorage.getItem('spotify_music_data');
-        if (legacyCachedData) {
-          try {
-            setMusicData(JSON.parse(legacyCachedData));
-            console.log('📦 Loaded legacy cached data as fallback');
-          } catch (error) {
-            console.error('Error parsing legacy cached data:', error);
-          }
-        }
-      }
     }
   }, [fetchUserProfile]);
 

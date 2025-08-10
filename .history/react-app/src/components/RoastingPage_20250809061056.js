@@ -148,63 +148,6 @@ const RoastingPage = ({ selectedActor, spotifyData, onBack, onAudioRoast }) => {
                     <small>⚠️ AI had a hiccup, but the roast continues!</small>
                   </div>
                 )}
-                
-                {/* Debug section for development */}
-                {process.env.NODE_ENV === 'development' && (
-                  <div className="debug-section" style={{
-                    marginTop: '20px',
-                    padding: '15px',
-                    background: '#f8f9fa',
-                    border: '1px solid #e9ecef',
-                    borderRadius: '8px',
-                    fontSize: '12px'
-                  }}>
-                    <h4 style={{ color: '#495057', marginBottom: '10px' }}>🐛 Debug Info</h4>
-                    <div style={{ marginBottom: '10px' }}>
-                      <strong>Data Status:</strong> {spotifyData ? '✅ Available' : '❌ Missing'}
-                    </div>
-                    {spotifyData && (
-                      <div style={{ marginBottom: '10px' }}>
-                        <strong>Data Structure:</strong>
-                        <ul style={{ margin: '5px 0', paddingLeft: '20px' }}>
-                          <li>Artists: {spotifyData?.topArtists?.mediumTerm?.length || 0}</li>
-                          <li>Tracks: {spotifyData?.topTracks?.mediumTerm?.length || 0}</li>
-                          <li>Genres: {spotifyData?.insights?.topGenres?.length || 0}</li>
-                        </ul>
-                      </div>
-                    )}
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                      <button 
-                        onClick={handleTestGemini}
-                        style={{
-                          padding: '5px 10px',
-                          fontSize: '11px',
-                          backgroundColor: '#007bff',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '4px',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        🧪 Test Gemini
-                      </button>
-                      <button 
-                        onClick={() => console.log('📊 Current Spotify Data:', spotifyData)}
-                        style={{
-                          padding: '5px 10px',
-                          fontSize: '11px',
-                          backgroundColor: '#28a745',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '4px',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        📊 Log Data
-                      </button>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           )}

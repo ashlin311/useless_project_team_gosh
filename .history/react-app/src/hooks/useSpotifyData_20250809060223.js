@@ -219,37 +219,6 @@ export const useSpotifyData = (accessToken, options = {}) => {
 };
 
 /**
- * Hook specifically for roasting data with localStorage integration
- */
-export const useSpotifyRoastingData = (accessToken, options = {}) => {
-  return useSpotifyData(accessToken, {
-    ...options,
-    useLocalStorage: true
-  });
-};
-
-/**
- * Hook for just checking data status without loading
- */
-export const useSpotifyDataStatus = () => {
-  const [status, setStatus] = useState(null);
-
-  useEffect(() => {
-    const updateStatus = () => {
-      const currentStatus = SpotifyDataManager.getDataStatus();
-      setStatus(currentStatus);
-    };
-
-    updateStatus();
-    const interval = setInterval(updateStatus, 30000); // Every 30 seconds
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return status;
-};
-
-/**
  * Hook for getting roasting insights from music data
  * @param {Object} musicData - Processed music data
  * @returns {Object} - Roasting insights and statistics

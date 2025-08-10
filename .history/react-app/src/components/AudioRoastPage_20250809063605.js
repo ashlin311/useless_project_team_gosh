@@ -134,14 +134,7 @@ const AudioRoastPage = ({ spotifyData, onBack }) => {
       const result = await generateAudioRoast(selectedActor, audioBase64, severity);
       
       if (result.success) {
-        setRoastResult({
-          roastText: result.roast,
-          actor: result.actor,
-          severity: result.severity,
-          observations: ['Audio successfully analyzed'],
-          tips: ['Great job recording!'],
-          score: 8
-        });
+        setRoastResult(result.audioRoast);
       } else {
         setRoastResult({
           roastText: result.fallbackRoast || 'Sorry, could not analyze your singing right now!',

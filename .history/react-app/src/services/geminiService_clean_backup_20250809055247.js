@@ -87,7 +87,7 @@ OUTPUT: Produce a concise, display-ready roast in the requested voice, ready to 
 
 // Audio roasting prompts for each actor
 const audioRoastingPrompts = {
-  mohanlal: `You are analyzing a singing audio clip in Mohanlal's mass-dialogue style. Channel his trademark wit, cinematic punch, and effortless authority. Use Malayalam-English mix naturally with memorable punchlines. Focus on the singing performance with his characteristic humor—like he's delivering a verdict with that perfect Mohanlal timing. In the given audio, two people are trying to sing apana bana le by arijit singh`,
+  mohanlal: `You are analyzing a singing audio clip in Mohanlal's mass-dialogue style. Channel his trademark wit, cinematic punch, and effortless authority. Use Malayalam-English mix naturally with memorable punchlines. Focus on the singing performance with his characteristic humor—like he's delivering a verdict with that perfect Mohanlal timing.`,
   
   fahadh: `You are Rangan Chettan from Aavesham analyzing someone's singing. Channel that manic intensity and unpredictable energy. Start aggressive about their singing, maybe get unexpectedly philosophical about music, then swing back to savage. Use natural Malayalam-English mix ("enthada," "eda," "machane"). Make it personal but hilarious with that signature Rangan laugh energy.`,
   
@@ -156,11 +156,6 @@ Focus specifically on these artists and tracks. Be brutal but entertaining. Reme
 
 export const generateAudioRoast = async (actorId, audioBase64, severity = 'medium') => {
   try {
-    console.log('🎵 Starting audio roast generation...');
-    console.log('Actor ID:', actorId);
-    console.log('Audio data length:', audioBase64 ? audioBase64.length : 'No audio data');
-    console.log('Severity:', severity);
-
     const actorPromptText = audioRoastingPrompts[actorId];
     if (!actorPromptText) {
       throw new Error(`Actor ${actorId} not found for audio roasting`);
@@ -196,44 +191,15 @@ Do not include any other text, explanations, or formatting. Just the JSON object
 
     console.log('🎵 Sending audio roast prompt to Gemini...');
 
-    // Convert base64 to proper format if needed
-    let audioData = audioBase64;
-    if (audioBase64.includes(',')) {
-      audioData = audioBase64.split(',')[1];
-    }
-
-    // Try multiple MIME types to ensure compatibility
-    const mimeTypes = ['audio/webm', 'audio/wav', 'audio/mp3', 'audio/ogg', 'audio/m4a'];
-    let result = null;
-    let lastError = null;
-
-    for (const mimeType of mimeTypes) {
-      try {
-        console.log(`🎵 Trying MIME type: ${mimeType}`);
-        
-        result = await model.generateContent([
-          systemPromptText,
-          {
-            inlineData: {
-              mimeType: mimeType,
-              data: audioData
-            }
-          }
-        ]);
-        
-        console.log(`✅ Success with MIME type: ${mimeType}`);
-        break; // If successful, break out of the loop
-        
-      } catch (mimeError) {
-        console.log(`❌ Failed with MIME type ${mimeType}:`, mimeError.message);
-        lastError = mimeError;
-        continue; // Try next MIME type
+    const result = await model.generateContent([
+      systemPromptText,
+      {
+        inlineData: {
+          mimeType: "audio/webm",
+          data: audioBase64
+        }
       }
-    }
-
-    if (!result) {
-      throw lastError || new Error('All MIME types failed');
-    }
+    ]);
 
     const response = await result.response;
     let responseText = response.text().trim();
@@ -246,7 +212,6 @@ Do not include any other text, explanations, or formatting. Just the JSON object
 
     try {
       const parsed = JSON.parse(responseText);
-      console.log('✅ Audio roast generated successfully:', parsed);
       return {
         success: true,
         roast: parsed.roast,
@@ -254,8 +219,7 @@ Do not include any other text, explanations, or formatting. Just the JSON object
         severity: parsed.severity
       };
     } catch (parseError) {
-      console.error('❌ Failed to parse JSON response:', parseError);
-      console.log('Raw response that failed to parse:', responseText);
+      console.error('Failed to parse JSON response:', parseError);
       return {
         success: false,
         error: 'Failed to parse AI response',
@@ -265,9 +229,6 @@ Do not include any other text, explanations, or formatting. Just the JSON object
 
   } catch (error) {
     console.error('❌ Error generating audio roast:', error);
-    console.error('Error details:', error.message);
-    console.error('Error stack:', error.stack);
-    
     return {
       success: false,
       error: error.message,

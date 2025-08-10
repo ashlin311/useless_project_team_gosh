@@ -31,51 +31,23 @@ function App() {
     window.localStorage.removeItem('spotify_music_data');
   }, []);
 
-  // Fetch user music data from Spotify API with enhanced localStorage integration
+  // Fetch user music data from Spotify API
   const fetchMusicData = useCallback(async (token) => {
     setDataLoading(true);
     try {
-      console.log('🎵 Fetching user music data with enhanced system...');
-      
-      // First try our new data manager for smart caching
-      const result = await SpotifyDataManager.initializeSpotifyData(token, {
-        autoRefresh: true,
-        refreshInterval: 30 * 60 * 1000, // 30 minutes
-        maxDataAge: 2 * 60 * 60 * 1000   // 2 hours
-      });
+      console.log('🎵 Fetching user music data...');
+      const result = await getUserMusicAnalysis(token);
       
       if (result.success) {
-        // Get the full data for the app
-        const fullData = SpotifyDataManager.getUserMusicData('full');
-        setMusicData(fullData);
-        console.log('✅ Enhanced music data fetched and stored successfully:', {
-          tracks: fullData?.topTracks?.mediumTerm?.length || 0,
-          artists: fullData?.topArtists?.mediumTerm?.length || 0,
-          genres: fullData?.insights?.topGenres?.length || 0
-        });
+        setMusicData(result.data);
+        // Store data in localStorage for persistence
+        window.localStorage.setItem('spotify_music_data', JSON.stringify(result.data));
+        console.log('✅ Music data fetched and stored successfully:', result.data);
       } else {
-        // Fallback to original method if new system fails
-        console.log('⚠️ New system failed, falling back to original method...');
-        const fallbackResult = await getUserMusicAnalysis(token);
-        
-        if (fallbackResult.success) {
-          setMusicData(fallbackResult.data);
-          // Store data in localStorage for persistence
-          window.localStorage.setItem('spotify_music_data', JSON.stringify(fallbackResult.data));
-          console.log('✅ Fallback music data fetched and stored successfully:', fallbackResult.data);
-        } else {
-          console.error('❌ Both systems failed to fetch music data:', fallbackResult.error);
-        }
+        console.error('❌ Failed to fetch music data:', result.error);
       }
     } catch (error) {
       console.error('❌ Error fetching music data:', error);
-      
-      // Try to use any cached data as last resort
-      const cachedData = SpotifyDataManager.getUserMusicData('full');
-      if (cachedData) {
-        console.log('📦 Using cached data as fallback');
-        setMusicData(cachedData);
-      }
     } finally {
       setDataLoading(false);
     }
@@ -124,23 +96,8 @@ function App() {
     }
   }, [fetchMusicData, logout]);
 
-  // Auto-login with environment token on component mount with enhanced data loading
+  // Auto-login with environment token on component mount
   useEffect(() => {
-    // First, check for cached data immediately
-    const status = SpotifyDataManager.getDataStatus();
-    if (status.hasData) {
-      console.log('📦 Found cached music data:', status);
-      const cachedData = SpotifyDataManager.getUserMusicData('full');
-      if (cachedData) {
-        setMusicData(cachedData);
-        console.log('✅ Loaded cached music data with', {
-          tracks: cachedData?.topTracks?.mediumTerm?.length || 0,
-          artists: cachedData?.topArtists?.mediumTerm?.length || 0,
-          genres: cachedData?.insights?.topGenres?.length || 0
-        });
-      }
-    }
-
     const envToken = process.env.REACT_APP_SPOTIFY_TEST_TOKEN;
     
     if (envToken) {
@@ -151,19 +108,6 @@ function App() {
     } else {
       console.error('❌ No Spotify token found in environment variables');
       alert('Spotify token not configured. Please check your .env file.');
-      
-      // Still try to use cached data even without token
-      if (!status.hasData) {
-        const legacyCachedData = window.localStorage.getItem('spotify_music_data');
-        if (legacyCachedData) {
-          try {
-            setMusicData(JSON.parse(legacyCachedData));
-            console.log('📦 Loaded legacy cached data as fallback');
-          } catch (error) {
-            console.error('Error parsing legacy cached data:', error);
-          }
-        }
-      }
     }
   }, [fetchUserProfile]);
 

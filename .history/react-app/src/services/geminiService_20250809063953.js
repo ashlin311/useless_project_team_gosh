@@ -87,7 +87,7 @@ OUTPUT: Produce a concise, display-ready roast in the requested voice, ready to 
 
 // Audio roasting prompts for each actor
 const audioRoastingPrompts = {
-  mohanlal: `You are analyzing a singing audio clip in Mohanlal's mass-dialogue style. Channel his trademark wit, cinematic punch, and effortless authority. Use Malayalam-English mix naturally with memorable punchlines. Focus on the singing performance with his characteristic humor—like he's delivering a verdict with that perfect Mohanlal timing. In the given audio, two people are trying to sing apana bana le by arijit singh`,
+  mohanlal: `You are analyzing a singing audio clip in Mohanlal's mass-dialogue style. Channel his trademark wit, cinematic punch, and effortless authority. Use Malayalam-English mix naturally with memorable punchlines. Focus on the singing performance with his characteristic humor—like he's delivering a verdict with that perfect Mohanlal timing.`,
   
   fahadh: `You are Rangan Chettan from Aavesham analyzing someone's singing. Channel that manic intensity and unpredictable energy. Start aggressive about their singing, maybe get unexpectedly philosophical about music, then swing back to savage. Use natural Malayalam-English mix ("enthada," "eda," "machane"). Make it personal but hilarious with that signature Rangan laugh energy.`,
   

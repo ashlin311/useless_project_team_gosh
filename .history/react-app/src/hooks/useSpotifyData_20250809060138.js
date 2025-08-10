@@ -25,77 +25,35 @@ export const useSpotifyData = (accessToken, options = {}) => {
     ...options
   };
 
-  // Update data status
-  const updateStatus = useCallback(() => {
-    const status = SpotifyDataManager.getDataStatus();
-    setDataStatus(status);
-    return status;
-  }, []);
-
-  // Fetch comprehensive music analysis with localStorage integration
-  const fetchMusicAnalysis = useCallback(async (forceRefresh = false) => {
+  // Fetch comprehensive music analysis
+  const fetchMusicAnalysis = useCallback(async () => {
     if (!accessToken) return;
 
     setLoading(true);
     setError(null);
 
     try {
-      if (config.useLocalStorage) {
-        // Use data manager for smart caching
-        let result;
+      const result = await getUserMusicAnalysis(accessToken);
+      
+      if (result.success) {
+        setMusicData(result.data);
         
-        if (forceRefresh) {
-          result = await SpotifyDataManager.forceRefreshData(accessToken);
-        } else {
-          result = await SpotifyDataManager.initializeSpotifyData(accessToken, config);
-        }
+        // Format and set top tracks (medium term as default)
+        const formattedTracks = result.data.topTracks.mediumTerm.map(formatTrackData);
+        setTopTracks(formattedTracks);
 
-        if (result.success) {
-          const storedData = SpotifyDataManager.getUserMusicData('full');
-          setMusicData(storedData);
-          
-          // Set formatted tracks and artists
-          if (storedData?.topTracks?.mediumTerm) {
-            setTopTracks(storedData.topTracks.mediumTerm);
-          }
-          if (storedData?.topArtists?.mediumTerm) {
-            setTopArtists(storedData.topArtists.mediumTerm);
-          }
-
-          // Set up auto-refresh cancellation
-          if (result.cancelAutoRefresh) {
-            setAutoRefreshCancel(() => result.cancelAutoRefresh);
-          }
-        } else {
-          setError(result.error);
-        }
+        // Format and set top artists (medium term as default)
+        const formattedArtists = result.data.topArtists.mediumTerm.map(formatArtistData);
+        setTopArtists(formattedArtists);
       } else {
-        // Original API-only approach
-        const result = await getUserMusicAnalysis(accessToken);
-        
-        if (result.success) {
-          setMusicData(result.data);
-          
-          // Format and set top tracks (medium term as default)
-          const formattedTracks = result.data.topTracks.mediumTerm.map(formatTrackData);
-          setTopTracks(formattedTracks);
-
-          // Format and set top artists (medium term as default)
-          const formattedArtists = result.data.topArtists.mediumTerm.map(formatArtistData);
-          setTopArtists(formattedArtists);
-        } else {
-          setError(result.error);
-        }
+        setError(result.error);
       }
-
-      updateStatus();
     } catch (err) {
-      console.error('Error fetching music analysis:', err);
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  }, [accessToken, config, updateStatus]);
+  }, [accessToken]);
 
   // Fetch specific time range data
   const fetchTimeRangeData = useCallback(async (timeRange = 'medium_term') => {
@@ -126,127 +84,23 @@ export const useSpotifyData = (accessToken, options = {}) => {
     }
   }, [accessToken]);
 
-  // Clear all data
-  const clearData = useCallback(() => {
-    if (autoRefreshCancel) {
-      autoRefreshCancel();
-      setAutoRefreshCancel(null);
-    }
-    
-    if (config.useLocalStorage) {
-      SpotifyDataManager.clearAllData();
-    }
-    
-    setMusicData(null);
-    setTopTracks([]);
-    setTopArtists([]);
-    setError(null);
-    updateStatus();
-  }, [autoRefreshCancel, config.useLocalStorage, updateStatus]);
-
-  // Force refresh data
-  const refreshData = useCallback(() => {
-    return fetchMusicAnalysis(true);
-  }, [fetchMusicAnalysis]);
-
   // Auto-fetch data when access token is available
   useEffect(() => {
     if (accessToken) {
-      // Check for existing data first if using localStorage
-      if (config.useLocalStorage) {
-        const status = SpotifyDataManager.getDataStatus();
-        if (status.hasData && status.isFresh) {
-          // Load from cache
-          const cachedData = SpotifyDataManager.getUserMusicData('full');
-          if (cachedData) {
-            setMusicData(cachedData);
-            if (cachedData.topTracks?.mediumTerm) {
-              setTopTracks(cachedData.topTracks.mediumTerm);
-            }
-            if (cachedData.topArtists?.mediumTerm) {
-              setTopArtists(cachedData.topArtists.mediumTerm);
-            }
-            updateStatus();
-            setLoading(false);
-            return;
-          }
-        }
-      }
-      
       fetchMusicAnalysis();
     }
-    
-    // Cleanup on unmount
-    return () => {
-      if (autoRefreshCancel) {
-        autoRefreshCancel();
-      }
-    };
-  }, [accessToken, fetchMusicAnalysis, config.useLocalStorage, updateStatus]);
-
-  // Update status periodically
-  useEffect(() => {
-    if (config.useLocalStorage) {
-      const statusInterval = setInterval(updateStatus, 60000); // Every minute
-      return () => clearInterval(statusInterval);
-    }
-  }, [updateStatus, config.useLocalStorage]);
+  }, [accessToken, fetchMusicAnalysis]);
 
   return {
-    // Data
     musicData,
     topTracks,
     topArtists,
-    dataStatus,
-    
-    // States
     loading,
     error,
-    hasData: dataStatus?.hasData || Boolean(musicData),
-    isFresh: dataStatus?.isFresh || false,
-    
-    // Functions
     fetchMusicAnalysis,
     fetchTimeRangeData,
-    refreshData,
-    clearData,
-    refetch: fetchMusicAnalysis,
-    
-    // Utilities
-    isReady: !loading && !error && musicData,
-    needsRefresh: dataStatus?.hasData && !dataStatus?.isFresh
+    refetch: fetchMusicAnalysis
   };
-};
-
-/**
- * Hook specifically for roasting data with localStorage integration
- */
-export const useSpotifyRoastingData = (accessToken, options = {}) => {
-  return useSpotifyData(accessToken, {
-    ...options,
-    useLocalStorage: true
-  });
-};
-
-/**
- * Hook for just checking data status without loading
- */
-export const useSpotifyDataStatus = () => {
-  const [status, setStatus] = useState(null);
-
-  useEffect(() => {
-    const updateStatus = () => {
-      const currentStatus = SpotifyDataManager.getDataStatus();
-      setStatus(currentStatus);
-    };
-
-    updateStatus();
-    const interval = setInterval(updateStatus, 30000); // Every 30 seconds
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return status;
 };
 
 /**
