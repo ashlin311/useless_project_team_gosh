@@ -3,7 +3,7 @@
 # Mollywoodify 🎯
 
 ## Basic Details
-**Team Name:** Playback Pottans  
+**Team Name:** GOSH
 
 **Team Members**  
 - **Member 1:** Ashlin Joe Thekkekuttu - Muthoot Institute of Technology and Science  
@@ -12,17 +12,17 @@
 ---
 
 ## Project Description
-A web app where legendary Mollywood actors roast your Spotify music taste (and optionally your singing) with hilarious, movie-reference-filled commentary.
+A web app where legendary Mollywood actors roast your singing with hilarious, movie-reference-filled commentary.
 
 ---
 
 ## The Problem (that doesn't exist)
-Nobody in history has ever woken up and thought, *"Man, I wish Mohanlal would roast my playlist while Fahadh Faasil listens in judgment."* But here we are.
+Nobody in history has ever woken up and thought, *"Man, I wish Mohanlal would roast my singing while Fahadh Faasil listens in judgment."* But here we are.
 
 ---
 
 ## The Solution (that nobody asked for)
-We connect to your Spotify account, grab your top artists and tracks, and have Kerala’s finest actors deliver world-class roasts — in Manglish, with movie references, and zero mercy. Oh, and you can record your singing for them to tear apart too.
+You record your singing, and Kerala’s finest actors deliver world-class roasts — in Manglish, packed with movie references, and absolutely no mercy.
 
 ---
 
@@ -32,12 +32,12 @@ We connect to your Spotify account, grab your top artists and tracks, and have K
 **For Software:**  
 - **Languages:** JavaScript, HTML, CSS  
 - **Frameworks:** React  
-- **Libraries:** Spotify Web API, Google Gemini API (for AI-generated roasts)  
+- **Libraries:** Google Gemini API (for AI-generated roasts)  
 - **Tools:** npm, Git & GitHub  
 
 ---
 
-## ScreenShots
+
 
 ### Screenshot
 
