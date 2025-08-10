@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <div className="home-container">
         <header className="app-header">
-          <h1>Mollywoodify</h1>
+          
         </header>
 
         {currentPage === 'audio-roasting' && (

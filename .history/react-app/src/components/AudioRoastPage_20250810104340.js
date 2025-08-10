@@ -305,7 +305,7 @@ const AudioRoastPage = ({ onBack }) => {
 
   return (
     <div className="audio-roast-page">
-      
+      <AudioDebugHelper />
       <div className="header">
         <h1>🎤 Singing Roast</h1>
         <p>Let Malayalam movie stars roast your singing skills</p>
