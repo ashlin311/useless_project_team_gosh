@@ -322,7 +322,10 @@ const AudioRoastPage = ({ onBack }) => {
 
           <div className="result-actions">
             <button onClick={() => setRoastResult(null)} className="try-again-button">
-              🎤 Try Another Recording
+              🎤 Try Again
+            </button>
+            <button onClick={onBack} className="back-to-music-button">
+              🎵 Back to Music Roasts
             </button>
           </div>
         </div>

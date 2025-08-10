@@ -178,8 +178,11 @@ const AudioRoastPage = ({ onBack }) => {
   return (
     <div className="audio-roast-page">
       <div className="header">
-        <h1>🎤 AI Singing Roast Challenge</h1>
-        <p>Let Malayalam movie stars roast your singing skills with AI!</p>
+        <button onClick={onBack} className="back-button">
+          ← Back to Music Roasts
+        </button>
+        <h1>🎤 Singing Roast Challenge</h1>
+        <p>Let Malayalam actors roast your singing skills!</p>
       </div>
 
       {!roastResult ? (
@@ -322,7 +325,10 @@ const AudioRoastPage = ({ onBack }) => {
 
           <div className="result-actions">
             <button onClick={() => setRoastResult(null)} className="try-again-button">
-              🎤 Try Another Recording
+              🎤 Try Again
+            </button>
+            <button onClick={onBack} className="back-to-music-button">
+              🎵 Back to Music Roasts
             </button>
           </div>
         </div>
