@@ -41,12 +41,12 @@ We connect to your Spotify account, grab your top artists and tracks, and have K
 
 ### Screenshot
 
-https://ibb.co/ccKyBdqB
-https://ibb.co/J0g6zzC
-https://ibb.co/MxmFb0Rc
-https://ibb.co/Mkv2jrJb
-https://ibb.co/prn2GFyk
-https://ibb.co/HLgJXCsH
+https://ibb.co/ccKyBdqB<br>
+https://ibb.co/J0g6zzC<br>
+https://ibb.co/MxmFb0Rc<br>
+https://ibb.co/Mkv2jrJb<br>
+https://ibb.co/prn2GFyk<br>
+https://ibb.co/HLgJXCsH<br>
 
 I know it looks shady, but trust me, it's not. I am not a very capable person.
 
